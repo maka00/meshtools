@@ -42,15 +42,12 @@ int main(int argc, char** argv) {
         try {
             po::store(po::parse_command_line(argc, argv, desc), vm);
 
-            /** --help option
-             */
             if ( vm.count("help")  ) {
                 std::cout << "Mesh converter app" << "\n" << desc << "\n";
                 return SUCCESS;
             }
 
-            po::notify(vm); // throws on error, so do after help in case
-            // there are any problems
+            po::notify(vm); 
         } catch (po::error& e) {
             console->error("commandline error {0}", e.what());
             std::cout << desc << "\n";

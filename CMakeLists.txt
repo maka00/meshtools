@@ -17,7 +17,6 @@ endforeach(OUTPUTCONFIG ${CMAKE_CONFIGURATION_TYPES})
 set( EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set( LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-# if we need a logger
 add_subdirectory(${PROJECT_SOURCE_DIR}/external)
 add_subdirectory(${PROJECT_SOURCE_DIR}/common-lib)
 add_subdirectory(${PROJECT_SOURCE_DIR}/meshconvert)
