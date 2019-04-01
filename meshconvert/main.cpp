@@ -15,18 +15,20 @@ namespace
 } // namespace
 auto console = spdlog::stdout_color_mt("console");
 
-void convert(const std::string& from, const std::string& to) {
+void convert(const std::string &from, const std::string &to) {
         mesh::mesh_type a_mesh;
-        OpenMesh::IO::Options ropt;
-        if (!OpenMesh::IO::read_mesh(a_mesh, from,ropt)) {
+        OpenMesh::IO::Options opt = OpenMesh::IO::Options::Default;
+        a_mesh = mesh::load_mesh(from);
+        if (opt.face_has_color() || opt.vertex_has_color())
+            console->info("the mesh contains color information");
+
+        if (a_mesh.n_faces() == 0) {
             console->error("error reading file {0}", from);
             return;
         }
         console->info("converting {0} vertices", a_mesh.n_vertices());
-        OpenMesh::IO::Options wopt = OpenMesh::IO::Options::Default;
-        wopt += OpenMesh::IO::Options::Binary;
-        wopt += ropt;
-        OpenMesh::IO::write_mesh(a_mesh, to, wopt);
+        opt += OpenMesh::IO::Options::Binary;
+        mesh::store_mesh(a_mesh,to,opt);
 }
 
 int main(int argc, char** argv) {
