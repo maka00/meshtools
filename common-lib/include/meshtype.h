@@ -1,8 +1,8 @@
 #pragma once
 
+#include<OpenMesh/Core/IO/MeshIO.hh>
 #include<OpenMesh/Core/Mesh/Traits.hh>
 #include<OpenMesh/Core/Mesh/TriMesh_ArrayKernelT.hh>
-#include<OpenMesh/Core/IO/MeshIO.hh>
 
 namespace mesh {
     struct MeshTraits : public OpenMesh::DefaultTraits {
