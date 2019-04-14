@@ -35,8 +35,8 @@ set_target_properties(${PROJECT_NAME}
         CXX_STANDARD 17
         # CXX_EXTENSIONS OFF
         CMAKE_CXX_FLAGS_RELEASE "-O3"
-        IMPORTED_LOCATION "${EXTERNAL_OPENMESH_LIB_DIR}/libOpenMeshCore.so"
-        IMPORTED_LOCATION "${EXTERNAL_OPENMESH_LIB_DIR}/libOpenMeshTools.so"
+        IMPORTED_LOCATION "${EXTERNAL_OPENMESH_LIB_DIR}/libOpenMeshCore.a"
+        IMPORTED_LOCATION "${EXTERNAL_OPENMESH_LIB_DIR}/libOpenMeshTools.a"
         )
 
 target_include_directories(${PROJECT_NAME}
@@ -54,16 +54,17 @@ target_include_directories(${PROJECT_NAME}
         
         )
 # CMake 3.14 onwards
-#target_link_directories(${PROJECT_NAME}
-#        PRIVATE
-#        ../lib
-#)
+target_link_directories(${PROJECT_NAME}
+        PRIVATE
+        ${EXTERNAL_OPENMESH_LIB_DIR}
+        ../lib
+)
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
 	Threads::Threads
-        libOpenMeshCore.so
-        libOpenMeshTools.so
+        OpenMeshCore
+        OpenMeshTools
         common-lib
         Boost::program_options
         Boost::filesystem

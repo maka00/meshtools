@@ -23,7 +23,7 @@ application::application(const std::string &title, int width, int height) :
 
     m_logger = spdlog::get("logger");
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
     m_window = glfwCreateWindow(1280, 720, "MeshGUI", nullptr, nullptr);
@@ -83,7 +83,7 @@ application::~application() {
 void application::run() {
     initialize();
 
-    ImVec4 clear_color = ImVec4(0x49/255.f, 0x49/255.f, 0x49/255.f, 1.00f);
+    ImVec4 clear_color = ImVec4(0x49 / 255.f, 0x49 / 255.f, 0x49 / 255.f, 1.00f);
     while (!glfwWindowShouldClose(m_window)) {
         glfwPollEvents();
         ImGui_ImplOpenGL3_NewFrame();
@@ -92,23 +92,23 @@ void application::run() {
 
         // draw the main menu
         if (ImGui::BeginMainMenuBar()) {
-            if(ImGui::BeginMenu("File")) {
-            if(ImGui::BeginMenu("Open")) {
-                for(auto item : get_directory_list(m_work_dir, ".ply|.stl|.obj|.xyz")) {
-                    if(ImGui::MenuItem(item.c_str()))
-                        m_logger->info("Picked {0}", item.c_str());
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::BeginMenu("Open")) {
+                    for (auto item : get_directory_list(m_work_dir, ".ply|.stl|.obj|.xyz")) {
+                        if (ImGui::MenuItem(item.c_str()))
+                            m_logger->info("Picked {0}", item.c_str());
+                    }
+                    ImGui::EndMenu();
+                }
+                ImGui::MenuItem("Save");
+                ImGui::Separator();
+                if (ImGui::MenuItem("Exit")) {
+                    glfwSetWindowShouldClose(m_window, GLFW_TRUE);
                 }
                 ImGui::EndMenu();
-            }
-            ImGui::MenuItem("Save");
-            ImGui::Separator();
-            if (ImGui::MenuItem("Exit")) {
-                glfwSetWindowShouldClose(m_window, GLFW_TRUE);
-            }
-            ImGui::EndMenu();
 
             }
-       }
+        }
         ImGui::EndMainMenuBar();
 
         // draw the toolbox
@@ -122,7 +122,7 @@ void application::run() {
             ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
             ImGui::ColorEdit3("clear color", (float *) &clear_color); // Edit 3 floats representing a color
 
-            if (ImGui::Button( "Button"))
+            if (ImGui::Button("Button"))
                 counter++;
             ImGui::SameLine();
             ImGui::Text("counter = %d", counter);
@@ -191,7 +191,7 @@ void application::initialize() {
     if (!ImGui_ImplGlfw_InitForOpenGL(m_window, false)) {
         throw application_exception("Error in ImGUI InitForOpenGL");
     }
-    const char *glsl_version = "#version 130";
+    const char *glsl_version = "#version 410";
     if (!ImGui_ImplOpenGL3_Init(glsl_version)) {
         throw application_exception("Error in ImGUI ImplOpenGL3 Init");
     }

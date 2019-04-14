@@ -16,6 +16,7 @@ else()
     endif()
 endif()
 set(SOURCES main.cpp shader.cpp shader.h camera.cpp camera.h helper.h application.cpp application.h)
+
 if (WIN32)
 	SET (Boost_USE_STATIC_LIBS ON)
 endif(WIN32)
@@ -29,7 +30,8 @@ find_package(glfw3 REQUIRED)
 if (CMAKE_BUILD_TYPE MATCHES Debug)
     add_definitions(-D_DEBUG=1)
 endif()
-add_executable(${PROJECT_NAME} ${SOURCES} ${EXTERNAL_IMGUI_SOURCES} imgui_impl_glfw.cpp imgui_impl_opengl3.cpp ${PROJECT_SOURCE_DIR}/GLAD/src/glad.c)
+set(IMGUI_FILES imgui.cpp imgui_draw.cpp imgui_widgets.cpp imgui_impl_glfw.cpp imgui_impl_opengl3.cpp  )
+add_executable(${PROJECT_NAME} ${SOURCES} ${IMGUI_FILES} ${PROJECT_SOURCE_DIR}/GLAD/src/glad.c)
 
 set_target_properties(${PROJECT_NAME}
         PROPERTIES
@@ -59,16 +61,18 @@ target_include_directories(${PROJECT_NAME}
         
         )
 # CMake 3.14 onwards
-#target_link_directories(${PROJECT_NAME}
-#        PRIVATE
-#        ../lib
-#)
+target_link_directories(${PROJECT_NAME}
+        PRIVATE
+        ${EXTERNAL_OPENMESH_LIB_DIR}
+        ../lib
+)
+
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
         Threads::Threads
-        libOpenMeshCore.so
-        libOpenMeshTools.so
+        OpenMeshCore
+        OpenMeshTools
         common-lib
         Boost::program_options
         Boost::filesystem

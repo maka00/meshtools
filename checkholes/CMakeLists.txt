@@ -54,16 +54,17 @@ target_include_directories(${PROJECT_NAME}
         
         )
 # CMake 3.14 onwards
-#target_link_directories(${PROJECT_NAME}
-#        PRIVATE
-#        ../lib
-#)
+target_link_directories(${PROJECT_NAME}
+        PRIVATE
+        ${EXTERNAL_OPENMESH_LIB_DIR}
+        ../lib
+)
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
 	Threads::Threads
-        libOpenMeshCore.so
-        libOpenMeshTools.so
+        OpenMeshCore
+        OpenMeshTools
         common-lib
         Boost::program_options
         Boost::filesystem

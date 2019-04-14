@@ -89,3 +89,7 @@ inline std::vector<std::string> get_directory_list(const std::string &dir, const
     files = parse_dir(dir);
     return files;
 }
+
+inline bool is_directory(const std::string &path) {
+    return boost::filesystem::is_directory(path);
+}
