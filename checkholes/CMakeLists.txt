@@ -53,12 +53,16 @@ target_include_directories(${PROJECT_NAME}
         ${CMAKE_CURRENT_BINARY_DIR}
         
         )
-# CMake 3.14 onwards
-target_link_directories(${PROJECT_NAME}
-        PRIVATE
-        ${EXTERNAL_OPENMESH_LIB_DIR}
-        ../lib
-)
+
+if(${CMAKE_VERSION} VERSION_LESS "3.13.0")
+        link_directories( ${EXTERNAL_OPENMESH_LIB_DIR})
+else() 
+# CMake 3.13 onwards
+        target_link_directories(${PROJECT_NAME}
+                PRIVATE
+                ${EXTERNAL_OPENMESH_LIB_DIR}
+        )
+endif()
 
 target_link_libraries(${PROJECT_NAME}
         PUBLIC
