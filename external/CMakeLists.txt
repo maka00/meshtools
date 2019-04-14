@@ -79,12 +79,45 @@ ExternalProject_Add(
 # Update spdlog target
 add_custom_target(external-nanoflann-update
 	    COMMENT "Updated jlblancoc/nanoflann"
-	    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/nanflann/src/spdlog
+	    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/nanoflann/src/nanoflann
 	    COMMAND ${GIT_EXECUTABLE} pull
         DEPENDS nanoflann)
 # set include directory
 set(EXTERNAL_NANOFLANN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/nanoflann/src/nanoflann/include" PARENT_SCOPE)
 
+
+#------------------------------------------------------------------------------
+# IMGUI 
+#  * sets EXTERNAL_IMGUI_INCLUDE_DIR 
+#  * sets EXTERNAL_IMGUI_SOURCES 
+
+ExternalProject_Add(
+    imgui
+    PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    # For shallow git clone (without downloading whole history)
+    GIT_SHALLOW 1
+    # For point at certain tag
+    GIT_TAG v1.69
+    #disables auto update on every build
+    #    UPDATE_DISCONNECTED 1
+    #disable following
+    CONFIGURE_COMMAND "" BUILD_COMMAND "" INSTALL_DIR "" INSTALL_COMMAND ""
+    )
+# Update spdlog target
+add_custom_target(external-imgui-update
+        COMMENT "Updated ocornut/imgui"
+	    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/imgui/src/imgui
+	    COMMAND ${GIT_EXECUTABLE} pull
+        DEPENDS nanoflann)
+# set include directory
+set(EXTERNAL_NANOFLANN_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/imgui/src/imgui" PARENT_SCOPE)
+set(EXTERNAL_IMGUI_SOURCES 
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui/src/imgui/imgui.cpp"
+    # "${CMAKE_CURRENT_SOURCE_DIR}/imgui/src/imgui/imgui_demo.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui/src/imgui/imgui_draw.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imgui/src/imgui/imgui_widgets.cpp"
+    PARENT_SCOPE)
 
 #------------------------------------------------------------------------------
 # Catch - Unit test header only library
