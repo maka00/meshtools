@@ -17,21 +17,33 @@ steps:
 - script: |
     sudo apt -y update
     sudo apt install build-essential -y
-- task: Cahce@2
-  displayName: "Cache vcpgk's artifacts"
-  inputs:
-    key: $(Build.SourcesDirectory)/vcpkg_x64-linux.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
-    path: '$(Build.BinariesDirectory)/vcpkg'  
 
-- task: run-vcpkg@0
-  displayName: 'Run vcpkg'
-  inputs:
-    vcpkgArguments: $(Build.SourcesDirectory)/vcpkg_x64-linux.txt
-    vcpkgGitCommitId: $(vcpkgGitRef)
+    # Cache/Restore the vcpkg's build artifacts.
+  - task: Cache@2
+    displayName: 'Cache vcpkg's  artifacts'
+    inputs:
+      # As 'key' use the content of the response file, vcpkg's submodule fetched commit id and the platform name.
+      # The key must be one liner, each segment separated by pipe char, non-path segments enclosed by
+      # double quotes.
+      key: $(Build.SourcesDirectory)/vcpkg_x64-linux.txt | "$(Build.SourcesDirectory)/.git/modules/vcpkg/HEAD" | "$(Agent.OS)"
+      path: '$(Build.SourcesDirectory)/vcpkg'
+    - task: run-vcpkg@0
+      displayName: 'Run vcpkg'
+      inputs:
+        # Response file stored in source control, it provides the list of ports and triplet(s).
+        vcpkgArguments: @$(Build.SourcesDirectory)/vcpkg_x64-linux.txt
+        # Location of the vcpkg as submodule of the repository.
+        vcpkgDirectory: $(Build.SourcesDirectory)/vcpkg
 
-- script: |
-    ./vcpkg/bootstrap-vcpkg.sh
-    ./vcpkg/vcpkg install boost-system booost-filesystem boost-iostreams boost-program-options
+    - task: run-cmake@0
+      displayName: 'Run CMake with CMakeSettings.json'
+      inputs:
+        cmakeListsOrSettingsJson: 'CMakeSettingsJson'
+        # Use the vcpkg's toolchain file for CMake.
+        useVcpkgToolchainFile: true
+        # Build all configurations whose name starts with "Linux".
+        configurationRegexFilter: 'Linux.*'
+
 - task: CMake@1
   inputs:
     cmakeArgs: '..'
