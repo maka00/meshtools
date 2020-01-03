@@ -18,7 +18,7 @@ steps:
     sudo apt -y update
     sudo apt install build-essential -y
 - task: Cahce@2
-  displayName "Cache vcpgk's artifacts"
+  displayName: "Cache vcpgk's artifacts"
   inputs:
     key: $(Build.SourcesDirectory)/vcpkg_x64-linux.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
     path: '$(Build.BinariesDirectory)/vcpkg'  
