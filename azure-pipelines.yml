@@ -8,6 +8,8 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
+variables:
+  vcpkgGitRef: 0ee4f000bd3405ab79be4f005f778ba3c314b2e5
 
 steps:
 - script: echo Create MeshTools
@@ -15,6 +17,19 @@ steps:
 - script: |
     sudo apt -y update
     sudo apt install build-essential -y
+- task: Cahce@2
+  displayName "Cache vcpgk's artifacts"
+  inputs:
+    key: $(Build.SourcesDirectory)/vcpkg_x64-linux.txt | "$(vcpkgGitRef)" | "$(Agent.OS)"
+    path: '$(Build.BinariesDirectory)/vcpkg'  
+
+- task: run-vcpkg@0
+  displayName: 'Run vcpkg'
+  inputs:
+    vcpkgArguments: @$(Build.SourcesDirectory)/vcpkg_x64-linux.txt
+    vcpkgGitCommitId: $(vcpkgGitRef)
+
+- script: |
     ./vcpkg/bootstrap-vcpkg.sh
     ./vcpkg/vcpkg install boost-system booost-filesystem boost-iostreams boost-program-options
 - task: CMake@1
