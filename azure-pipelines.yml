@@ -16,7 +16,7 @@ steps:
     sudo apt -y update
     sudo apt install build-essential -y
     ./vcpkg/bootstrap-vcpkg.sh
-    ./vcpkg/install boost-system boost-filesystem boost-iostreams boost-program-options
+    ./vcpkg/vcpkg install boost-system boost-filesystem boost-iostreams boost-program-options
     # Cache/Restore the vcpkg's build artifacts.
 - task: CMake@1
   inputs:
