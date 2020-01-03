@@ -13,7 +13,6 @@ steps:
 - script: echo Create MeshTools
   displayName: 'MeshTools started'
 - script: |
-  sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   sudo apt -y update
   sudo apt install build-essential -y
   ./vcpkg/bootstrap-vcpkg.sh
