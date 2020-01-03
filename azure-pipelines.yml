@@ -14,8 +14,12 @@ steps:
   displayName: 'MeshTools started'
 - task: CMake@1
   inputs:
-    cmakeArgs: 
-
+    cmakeArgs: '..'
+- task: CMake@1
+  displayName: 'CMake --build . --config Release'
+  inputs:
+    cmakeArgs: '--build . --config Release'
+    
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
